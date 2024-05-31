@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import ChatFlowOverview from "./components/chatFlow/ChatFlowOverview";
+import ChatRight from "./components/chatRight/ChatRight";
+import Header from "./components/layout/Header";
+import { ChatFlowProvider } from "./context/ChatFlowContext";
 
 function App() {
+  const [message, setMessage] = useState("");
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <ChatFlowProvider>
+        <Header message={message} />
+
+        <div className="mt-20 h-screen flex">
+          <div className="w-4/5 p-4">
+            <ChatFlowOverview />
+          </div>
+
+          <div className="w-px bg-gray-400 mx-4"></div>
+
+          <ChatRight setMessage={setMessage} message={message} />
+        </div>
+      </ChatFlowProvider>
+    </>
   );
 }
 
