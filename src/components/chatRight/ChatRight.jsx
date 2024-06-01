@@ -3,7 +3,7 @@ import MessageIcon from "../../images/message.svg";
 import ChatFlowContext from "../../context/ChatFlowContext";
 import BackIcon from "../../images/backIcon.svg";
 
-const ChatRight = ({ setMessage, message, nodes }) => {
+const ChatRight = ({ setMessage, message, nodes, setNodes }) => {
   const { selectedNodeId, setSelectedNodeId } = useContext(ChatFlowContext);
 
   useEffect(() => {
@@ -17,7 +17,24 @@ const ChatRight = ({ setMessage, message, nodes }) => {
 
   const goBack = () => setSelectedNodeId(null);
 
-  const addNode = () => {};
+  // Creating new node on click of message box
+  const addNode = () => {
+    const newNode = {
+      id: (nodes.length + 1).toString(), // Generate a new id
+      type: "CustomResizerNode",
+      data: { label: "Text node" + (nodes.length + 1) },
+      position: { x: Math.random() * 1000, y: Math.random() * 600 }, // Random position
+      style: {
+        background: "#fff",
+        width: 200,
+        borderRadius: 8,
+        fontSize: 12,
+        minHeight: 20,
+        boxShadow: "9px 6px 25px -2px rgba(153,153,153,0.72)",
+      },
+    };
+    setNodes((prevNodes) => [...prevNodes, newNode]);
+  };
 
   return (
     <div className="w-1/5 py-4 pr-1">
@@ -44,15 +61,12 @@ const ChatRight = ({ setMessage, message, nodes }) => {
           />
         </div>
       ) : (
-        <div className="cursor-pointer border-2 rounded border-gray-500">
+        <div
+          onClick={addNode}
+          className="cursor-pointer border-2 rounded border-gray-500"
+        >
           <div className="flex flex-col gap-y-2 px-4 justify-center items-center py-4">
-            <img
-              onClick={addNode}
-              src={MessageIcon}
-              alt="message-icon"
-              width={30}
-              height={30}
-            />
+            <img src={MessageIcon} alt="message-icon" width={30} height={30} />
 
             <h6>Message</h6>
           </div>

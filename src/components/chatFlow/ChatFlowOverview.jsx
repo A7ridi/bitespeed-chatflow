@@ -1,5 +1,4 @@
 import ReactFlow, {
-  MiniMap,
   Controls,
   useNodesState,
   useEdgesState,
@@ -14,6 +13,7 @@ import ChatFlowContext from "../../context/ChatFlowContext";
 import ChatRight from "../chatRight/ChatRight";
 import { initialEdges, initialNodes } from "./initial-elements";
 import Header from "../layout/Header";
+import { areAllNodesConnected } from "../../utils/checkAllNodes";
 
 const nodeTypes = {
   CustomResizerNode,
@@ -24,6 +24,7 @@ export default function NodeToolbarExample() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -35,18 +36,27 @@ export default function NodeToolbarExample() {
   };
 
   const handleSaveChanges = () => {
-    setNodes((prevNodes) =>
-      prevNodes.map((node) =>
-        node.id === selectedNodeId
-          ? { ...node, data: { ...node.data, label: message } }
-          : node
-      )
-    );
+    const allConnected = areAllNodesConnected(nodes, edges);
+    console.log({ nodes, edges, allConnected });
+
+    if (allConnected) {
+      setError("");
+
+      setNodes((prevNodes) =>
+        prevNodes.map((node) =>
+          node.id === selectedNodeId
+            ? { ...node, data: { ...node.data, label: message } }
+            : node
+        )
+      );
+    } else {
+      setError("Cannot save flow");
+    }
   };
 
   return (
     <>
-      <Header handleSaveChanges={handleSaveChanges} />
+      <Header handleSaveChanges={handleSaveChanges} error={error} />
 
       <div className="mt-20 h-screen flex">
         <div className="w-4/5 p-4">
@@ -63,14 +73,18 @@ export default function NodeToolbarExample() {
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
           >
-            <MiniMap />
             <Controls />
           </ReactFlow>
         </div>
 
         <div className="w-px bg-gray-400 mx-4"></div>
 
-        <ChatRight setMessage={setMessage} message={message} nodes={nodes} />
+        <ChatRight
+          setNodes={setNodes}
+          setMessage={setMessage}
+          message={message}
+          nodes={nodes}
+        />
       </div>
     </>
   );
