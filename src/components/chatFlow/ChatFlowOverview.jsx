@@ -21,6 +21,7 @@ const nodeTypes = {
 
 export default function NodeToolbarExample() {
   const { setSelectedNodeId, selectedNodeId } = useContext(ChatFlowContext);
+
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [message, setMessage] = useState("");
@@ -35,10 +36,11 @@ export default function NodeToolbarExample() {
     setSelectedNodeId(node.id);
   };
 
+  // Saving node when clicking Save Changes button
   const handleSaveChanges = () => {
     const allConnected = areAllNodesConnected(nodes, edges);
-    console.log({ nodes, edges, allConnected });
 
+    // Checking if all nodes are connected or not
     if (allConnected) {
       setError("");
 
@@ -50,6 +52,7 @@ export default function NodeToolbarExample() {
         )
       );
     } else {
+      // Showing error message on the header
       setError("Cannot save flow");
     }
   };
@@ -59,6 +62,7 @@ export default function NodeToolbarExample() {
       <Header handleSaveChanges={handleSaveChanges} error={error} />
 
       <div className="mt-20 h-screen flex">
+        {/* Left side - text node reactflow */}
         <div className="w-4/5 p-4">
           <ReactFlow
             nodes={nodes}
@@ -77,8 +81,10 @@ export default function NodeToolbarExample() {
           </ReactFlow>
         </div>
 
+        {/* Vertical bar separating left and right side */}
         <div className="w-px bg-gray-400 mx-4"></div>
 
+        {/* Right side of the text node flow */}
         <ChatRight
           setNodes={setNodes}
           setMessage={setMessage}

@@ -6,6 +6,7 @@ import BackIcon from "../../images/backIcon.svg";
 const ChatRight = ({ setMessage, message, nodes, setNodes }) => {
   const { selectedNodeId, setSelectedNodeId } = useContext(ChatFlowContext);
 
+  // Updating text area whenever node id is selected
   useEffect(() => {
     if (selectedNodeId) {
       const findNode = nodes.find((n) => n.id === selectedNodeId);
@@ -61,16 +62,30 @@ const ChatRight = ({ setMessage, message, nodes, setNodes }) => {
           />
         </div>
       ) : (
-        <div
-          onClick={addNode}
-          className="cursor-pointer border-2 rounded border-gray-500"
-        >
-          <div className="flex flex-col gap-y-2 px-4 justify-center items-center py-4">
-            <img src={MessageIcon} alt="message-icon" width={30} height={30} />
+        <>
+          <div
+            onClick={addNode}
+            className="cursor-pointer border-2 rounded border-blue-500"
+          >
+            <div className="flex flex-col gap-y-2 px-4 justify-center items-center py-4 ">
+              <img
+                src={MessageIcon}
+                alt="message-icon"
+                width={30}
+                height={30}
+              />
 
-            <h6>Message</h6>
+              <h6 className="text-blue-500">Message</h6>
+            </div>
           </div>
-        </div>
+          <div className="flex flex-col mt-2">
+            <h6 className="text-sm mt-1">*Note:</h6>
+            <h6 className="text-sm mt-1">
+              1. Click message to create new text node
+            </h6>
+            <h6 className="text-sm mt-1">2. Click nodes to update text</h6>
+          </div>
+        </>
       )}
     </div>
   );
