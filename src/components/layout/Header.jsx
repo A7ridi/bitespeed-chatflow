@@ -1,15 +1,6 @@
-import React, { useContext } from "react";
-import ChatFlowContext from "../../context/ChatFlowContext";
+import React from "react";
 
-const Header = ({ message }) => {
-  const { selectedNodeId, updateNodeLabel } = useContext(ChatFlowContext);
-
-  const handleSaveChanges = () => {
-    if (selectedNodeId) {
-      updateNodeLabel(selectedNodeId, message);
-    }
-  };
-
+const Header = ({ handleSaveChanges }) => {
   return (
     <header className="fixed top-0 left-0 w-full bg-gray-200 flex justify-end p-4">
       <button

@@ -1,10 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import MessageIcon from "../../images/message.svg";
 import ChatFlowContext from "../../context/ChatFlowContext";
 import BackIcon from "../../images/backIcon.svg";
 
-const ChatRight = ({ setMessage, message }) => {
+const ChatRight = ({ setMessage, message, nodes }) => {
   const { selectedNodeId, setSelectedNodeId } = useContext(ChatFlowContext);
+
+  useEffect(() => {
+    if (selectedNodeId) {
+      const findNode = nodes.find((n) => n.id === selectedNodeId);
+      const getMessage = findNode.data.label ?? "";
+
+      setMessage(getMessage);
+    }
+  }, [selectedNodeId]);
 
   const goBack = () => setSelectedNodeId(null);
 
@@ -35,10 +44,9 @@ const ChatRight = ({ setMessage, message }) => {
           />
         </div>
       ) : (
-        <div className="border-2 rounded border-gray-500">
+        <div className="cursor-pointer border-2 rounded border-gray-500">
           <div className="flex flex-col gap-y-2 px-4 justify-center items-center py-4">
             <img
-              className="cursor-pointer"
               onClick={addNode}
               src={MessageIcon}
               alt="message-icon"
